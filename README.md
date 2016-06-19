@@ -1,2 +1,2 @@
-# pushmo
+# pushmoi
 Send/Receive Pushbullet message

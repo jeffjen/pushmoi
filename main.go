@@ -21,13 +21,19 @@ func main() {
 	app.Commands = []cli.Command{
 		oauth2.NewOAuth2Workflow(),
 		push.NewListDevices(),
+		push.NewSetCommand(),
+		push.NewGetCommand(),
 	}
 	app.Before = func(c *cli.Context) error {
 		if err := oauth2.PushBullet.Load(); err != nil {
 			return cli.NewExitError(err.Error(), 1)
-		} else {
-			return nil
 		}
+
+		if err := push.PushSettings.Load(); err != nil {
+			return cli.NewExitError(err.Error(), 1)
+		}
+
+		return nil
 	}
 	app.Action = func(c *cli.Context) error {
 		return cli.NewExitError("Incorrect usage; Try running 'pushmoi init'", 1)

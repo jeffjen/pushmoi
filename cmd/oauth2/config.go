@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	PUSH_BULLET_CONFDIR = "~/.pushmoi/pushbullet.json"
+	PUSH_BULLET_CONFIG = "~/.pushmoi/pushbullet.json"
 )
 
 type Device struct {
@@ -147,7 +147,7 @@ func (push *PushBulletConfig) Dump() error {
 }
 
 func getConfigPath() (string, error) {
-	conf := strings.Replace(PUSH_BULLET_CONFDIR, "~", os.Getenv("HOME"), 1)
+	conf := strings.Replace(PUSH_BULLET_CONFIG, "~", os.Getenv("HOME"), 1)
 	confdir := path.Dir(conf)
 	if _, err := os.Stat(confdir); err != nil {
 		if os.IsNotExist(err) {

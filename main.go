@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/jeffjen/pushmoi/cmd/oauth2"
+	"github.com/jeffjen/pushmoi/cmd/push"
 
 	"github.com/urfave/cli"
 
@@ -19,6 +20,7 @@ func main() {
 	}
 	app.Commands = []cli.Command{
 		oauth2.NewOAuth2Workflow(),
+		push.NewListDevices(),
 	}
 	app.Before = func(c *cli.Context) error {
 		if err := oauth2.PushBullet.Load(); err != nil {

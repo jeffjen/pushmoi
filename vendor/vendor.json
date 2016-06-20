@@ -3,6 +3,18 @@
 	"ignore": "",
 	"package": [
 		{
+			"checksumSHA1": "09mQOEtlqUoIz/sXFWA/vY1lEPw=",
+			"path": "github.com/mattn/go-runewidth",
+			"revision": "d6bea18f789704b5f83375793155289da36a3c7f",
+			"revisionTime": "2016-03-15T04:07:12Z"
+		},
+		{
+			"checksumSHA1": "z90AcA0oNNVHTMdZx8plkpvy8q0=",
+			"path": "github.com/olekukonko/tablewriter",
+			"revision": "8d0265a48283795806b872b4728c67bf5c777f20",
+			"revisionTime": "2016-05-27T08:21:33Z"
+		},
+		{
 			"checksumSHA1": "t3Gcal8WhBxnTfGjeIQDYcrXZwY=",
 			"path": "github.com/urfave/cli",
 			"revision": "7817f72540afa438b349cfa612e9d14618573adc",
@@ -15,5 +27,5 @@
 			"revisionTime": "2016-06-15T20:37:29Z"
 		}
 	],
-	"rootPath": "github.com/jeffjen/pushmo"
+	"rootPath": "github.com/jeffjen/pushmoi"
 }

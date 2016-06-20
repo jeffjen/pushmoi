@@ -1,4 +1,4 @@
-package cmd
+package oauth2
 
 import (
 	"github.com/urfave/cli"
@@ -17,6 +17,11 @@ const (
 	OAUTH2_TIMEOUT_DURATION = 3 * time.Minute
 
 	OAUTH2_WEB_URL = "localhost:8080/pushmoi/setup"
+)
+
+var (
+	// PushBullet configuration
+	PushBullet = NewConfig()
 )
 
 type oauth2Resp struct {
@@ -94,30 +99,47 @@ func startOAuth2Workflow(ctx context.Context) <-chan oauth2Resp {
 }
 
 func continueSetup(token string) error {
-	fmt.Println("Obtained access_token:", token, "\n")
-	return nil
+	defer PushBullet.Dump()
+
+	// Store access_token to Signin User
+	PushBullet.AccessToken = token
+
+	// Sync user profile and registered devices
+	if err := PushBullet.Sync(); err != nil {
+		return cli.NewExitError(err.Error(), 3)
+	} else {
+		return nil
+	}
 }
 
 func NewOAuth2Workflow() cli.Command {
 	return cli.Command{
 		Name:  "init",
 		Usage: "Initialize pushmoi client with PushBullet",
+		Flags: []cli.Flag{
+			cli.StringFlag{Name: "token", Usage: "Use this access_token to initialize"},
+		},
 		Action: func(c *cli.Context) error {
-			ctx, _ := context.WithTimeout(context.Background(), OAUTH2_TIMEOUT_DURATION)
-			srvctx, shutdown := context.WithCancel(ctx)
-			defer shutdown()
-			access_token := startOAuth2Workflow(srvctx)
-			fmt.Println("Please signin through the following URL:\n")
-			fmt.Println("  ", OAUTH2_WEB_URL, "\n")
-			select {
-			case <-ctx.Done():
-				return cli.NewExitError("Operation failed to complete", 1)
-			case resp := <-access_token:
-				if resp.err != nil {
-					return cli.NewExitError("Failed to obtain access token", 2)
-				} else {
-					return continueSetup(resp.token)
+			token := c.String("token")
+			if token == "" {
+				ctx, _ := context.WithTimeout(context.Background(), OAUTH2_TIMEOUT_DURATION)
+				srvctx, shutdown := context.WithCancel(ctx)
+				defer shutdown()
+				access_token := startOAuth2Workflow(srvctx)
+				fmt.Println("Please signin through the following URL:\n")
+				fmt.Println("  ", OAUTH2_WEB_URL, "\n")
+				select {
+				case <-ctx.Done():
+					return cli.NewExitError("Operation failed to complete", 1)
+				case resp := <-access_token:
+					if resp.err != nil {
+						return cli.NewExitError("Failed to obtain access token", 2)
+					} else {
+						return continueSetup(resp.token)
+					}
 				}
+			} else {
+				return continueSetup(token)
 			}
 		},
 	}

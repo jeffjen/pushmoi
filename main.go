@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jeffjen/pushmoi/cmd"
+	"github.com/jeffjen/pushmoi/cmd/oauth2"
 
 	"github.com/urfave/cli"
 
@@ -18,7 +18,14 @@ func main() {
 		cli.Author{"Yi-Hung Jen", "yihungjen@gmail.com"},
 	}
 	app.Commands = []cli.Command{
-		cmd.NewOAuth2Workflow(),
+		oauth2.NewOAuth2Workflow(),
+	}
+	app.Before = func(c *cli.Context) error {
+		if err := oauth2.PushBullet.Load(); err != nil {
+			return cli.NewExitError(err.Error(), 1)
+		} else {
+			return nil
+		}
 	}
 	app.Action = func(c *cli.Context) error {
 		return cli.NewExitError("Incorrect usage; Try running 'pushmoi init'", 1)

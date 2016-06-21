@@ -26,7 +26,7 @@ func main() {
 		push.NewSyncCommand(),
 	}
 	app.Before = func(c *cli.Context) error {
-		if err := oauth2.PushBullet.Load(); err != nil {
+		if err := oauth2.Pushbullet.Load(); err != nil {
 			return cli.NewExitError(err.Error(), 1)
 		}
 

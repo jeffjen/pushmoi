@@ -87,7 +87,7 @@ func NewSetCommand() cli.Command {
 			default:
 				return cli.NewExitError("Invalid use; setting not found", 1)
 			case "default":
-				for _, dev := range oauth2.PushBullet.Devices.Devices {
+				for _, dev := range oauth2.Pushbullet.Devices.Devices {
 					if dev.Nickname == value {
 						defer PushSettings.Dump()
 						PushSettings.Default = &dev
@@ -128,13 +128,13 @@ func NewSyncCommand() cli.Command {
 		Name:  "sync",
 		Usage: "Sync config and check settings validity",
 		Action: func(c *cli.Context) error {
-			defer oauth2.PushBullet.Dump()
+			defer oauth2.Pushbullet.Dump()
 
 			ctx, _ := context.WithTimeout(context.Background(), 1*time.Minute)
 
 			// Sync user profile and registered devices
-			if err := oauth2.PushBullet.Sync(ctx); err != nil {
-				return cli.NewExitError("Failed to sync PushBullet info", 3)
+			if err := oauth2.Pushbullet.Sync(ctx); err != nil {
+				return cli.NewExitError("Failed to sync Pushbullet info", 3)
 			} else {
 				return nil
 			}

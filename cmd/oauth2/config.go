@@ -45,7 +45,7 @@ func (d *Devices) Get(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	req.Header.Add("Access-Token", PushBullet.AccessToken)
+	req.Header.Add("Access-Token", Pushbullet.AccessToken)
 
 	resp, err := ctxhttp.Do(ctx, cli, req)
 	if err != nil {
@@ -80,7 +80,7 @@ func (u *User) Get(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	req.Header.Add("Access-Token", PushBullet.AccessToken)
+	req.Header.Add("Access-Token", Pushbullet.AccessToken)
 
 	resp, err := ctxhttp.Do(ctx, cli, req)
 	if err != nil {

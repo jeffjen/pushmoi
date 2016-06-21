@@ -20,8 +20,8 @@ const (
 )
 
 var (
-	// PushBullet configuration
-	PushBullet = NewConfig()
+	// Pushbullet configuration
+	Pushbullet = NewConfig()
 )
 
 type oauth2Resp struct {
@@ -99,16 +99,16 @@ func startOAuth2Workflow(ctx context.Context) <-chan oauth2Resp {
 }
 
 func continueSetup(token string) error {
-	defer PushBullet.Dump()
+	defer Pushbullet.Dump()
 
 	// Store access_token to Signin User
-	PushBullet.AccessToken = token
+	Pushbullet.AccessToken = token
 
 	ctx, _ := context.WithTimeout(context.Background(), 1*time.Minute)
 
 	// Sync user profile and registered devices
-	if err := PushBullet.Sync(ctx); err != nil {
-		return cli.NewExitError("Failed to sync PushBullet info", 3)
+	if err := Pushbullet.Sync(ctx); err != nil {
+		return cli.NewExitError("Failed to sync Pushbullet info", 3)
 	} else {
 		return nil
 	}
@@ -117,7 +117,7 @@ func continueSetup(token string) error {
 func NewOAuth2Workflow() cli.Command {
 	return cli.Command{
 		Name:  "init",
-		Usage: "Initialize pushmoi client with PushBullet",
+		Usage: "Initialize pushmoi client with Pushbullet",
 		Flags: []cli.Flag{
 			cli.StringFlag{Name: "token", Usage: "Use this access_token to initialize"},
 		},

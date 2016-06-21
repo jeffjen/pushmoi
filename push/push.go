@@ -1,7 +1,7 @@
 package push
 
 import (
-	"github.com/jeffjen/pushmoi/cmd/oauth2"
+	"github.com/jeffjen/pushmoi/oauth2"
 
 	"golang.org/x/net/context"
 	"golang.org/x/net/context/ctxhttp"

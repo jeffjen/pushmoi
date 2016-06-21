@@ -1,7 +1,7 @@
 package push
 
 import (
-	"github.com/jeffjen/pushmoi/cmd/oauth2"
+	"github.com/jeffjen/pushmoi/oauth2"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli"

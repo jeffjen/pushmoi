@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/jeffjen/pushmoi/cmd/oauth2"
-	"github.com/jeffjen/pushmoi/cmd/push"
+	"github.com/jeffjen/pushmoi/oauth2"
+	"github.com/jeffjen/pushmoi/push"
 
 	"github.com/urfave/cli"
 	"golang.org/x/net/context"

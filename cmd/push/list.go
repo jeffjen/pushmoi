@@ -18,7 +18,7 @@ func NewListDevices() cli.Command {
 			table := tablewriter.NewWriter(os.Stdout)
 
 			table.SetHeader([]string{"Name", "Type", "SMS", "Active"})
-			for _, dev := range oauth2.Pushbullet.Devices.Devices {
+			for _, dev := range oauth2.Pushbullet.Devices {
 				if dev.Nickname == "" {
 					continue
 				}

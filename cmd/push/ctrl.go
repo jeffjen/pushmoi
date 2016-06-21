@@ -20,7 +20,7 @@ const (
 )
 
 var (
-	PushSettings = new(Settings)
+	Pushsettings = new(Settings)
 )
 
 type Settings struct {
@@ -87,10 +87,10 @@ func NewSetCommand() cli.Command {
 			default:
 				return cli.NewExitError("Invalid use; setting not found", 1)
 			case "default":
-				for _, dev := range oauth2.Pushbullet.Devices.Devices {
+				for _, dev := range oauth2.Pushbullet.Devices {
 					if dev.Nickname == value {
-						defer PushSettings.Dump()
-						PushSettings.Default = &dev
+						defer Pushsettings.Dump()
+						Pushsettings.Default = dev
 						return nil
 					}
 				}
@@ -113,10 +113,10 @@ func NewGetCommand() cli.Command {
 			default:
 				return cli.NewExitError("Invalid use; setting not found", 1)
 			case "default":
-				if PushSettings.Default == nil {
+				if Pushsettings.Default == nil {
 					return cli.NewExitError("No default push target", 0)
 				}
-				fmt.Println(PushSettings.Default.Nickname)
+				fmt.Println(Pushsettings.Default.Nickname)
 				return nil
 			}
 		},

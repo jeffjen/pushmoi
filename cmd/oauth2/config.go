@@ -34,11 +34,11 @@ type Device struct {
 	HasSms         bool    `json:"has_sms"`
 }
 
-type Devices struct {
-	Devices []Device `json:"devices"`
+type Devs struct {
+	Devices []*Device `json:"devices"`
 }
 
-func (d *Devices) Get(ctx context.Context) error {
+func (d *Devs) Get(ctx context.Context) error {
 	cli := new(http.Client)
 
 	req, err := http.NewRequest("GET", "https://api.pushbullet.com/v2/devices", nil)
@@ -96,7 +96,7 @@ func (u *User) Get(ctx context.Context) error {
 }
 
 type PushBulletConfig struct {
-	*Devices
+	*Devs
 	*User
 
 	AccessToken string `json:"access_token"`
@@ -104,7 +104,7 @@ type PushBulletConfig struct {
 
 func NewConfig() *PushBulletConfig {
 	p := new(PushBulletConfig)
-	p.Devices = new(Devices)
+	p.Devs = new(Devs)
 	p.User = new(User)
 	return p
 }
@@ -116,7 +116,7 @@ func (push *PushBulletConfig) Sync(ctx context.Context) error {
 	}
 
 	// Sync user registerd devices
-	if err := push.Devices.Get(ctx); err != nil {
+	if err := push.Devs.Get(ctx); err != nil {
 		return err
 	}
 

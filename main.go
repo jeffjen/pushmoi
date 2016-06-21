@@ -23,6 +23,7 @@ func main() {
 		push.NewListDevices(),
 		push.NewSetCommand(),
 		push.NewGetCommand(),
+		push.NewSyncCommand(),
 	}
 	app.Before = func(c *cli.Context) error {
 		if err := oauth2.PushBullet.Load(); err != nil {

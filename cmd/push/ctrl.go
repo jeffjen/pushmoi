@@ -4,6 +4,7 @@ import (
 	"github.com/jeffjen/pushmoi/cmd/oauth2"
 
 	"github.com/urfave/cli"
+	"golang.org/x/net/context"
 
 	"encoding/json"
 	"fmt"
@@ -11,6 +12,7 @@ import (
 	"os"
 	path "path/filepath"
 	"strings"
+	"time"
 )
 
 const (
@@ -115,6 +117,25 @@ func NewGetCommand() cli.Command {
 					return cli.NewExitError("No default push target", 0)
 				}
 				fmt.Println(PushSettings.Default.Nickname)
+				return nil
+			}
+		},
+	}
+}
+
+func NewSyncCommand() cli.Command {
+	return cli.Command{
+		Name:  "sync",
+		Usage: "Sync config and check settings validity",
+		Action: func(c *cli.Context) error {
+			defer oauth2.PushBullet.Dump()
+
+			ctx, _ := context.WithTimeout(context.Background(), 1*time.Minute)
+
+			// Sync user profile and registered devices
+			if err := oauth2.PushBullet.Sync(ctx); err != nil {
+				return cli.NewExitError("Failed to sync PushBullet info", 3)
+			} else {
 				return nil
 			}
 		},

@@ -104,9 +104,11 @@ func continueSetup(token string) error {
 	// Store access_token to Signin User
 	PushBullet.AccessToken = token
 
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Minute)
+
 	// Sync user profile and registered devices
-	if err := PushBullet.Sync(); err != nil {
-		return cli.NewExitError(err.Error(), 3)
+	if err := PushBullet.Sync(ctx); err != nil {
+		return cli.NewExitError("Failed to sync PushBullet info", 3)
 	} else {
 		return nil
 	}
@@ -124,10 +126,10 @@ func NewOAuth2Workflow() cli.Command {
 			if token == "" {
 				ctx, _ := context.WithTimeout(context.Background(), OAUTH2_TIMEOUT_DURATION)
 				srvctx, shutdown := context.WithCancel(ctx)
-				defer shutdown()
 				access_token := startOAuth2Workflow(srvctx)
 				fmt.Println("Please signin through the following URL:\n")
 				fmt.Println("  ", OAUTH2_WEB_URL, "\n")
+				defer shutdown()
 				select {
 				case <-ctx.Done():
 					return cli.NewExitError("Operation failed to complete", 1)

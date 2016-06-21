@@ -1,7 +1,11 @@
 package oauth2
 
 import (
+	"golang.org/x/net/context"
+	"golang.org/x/net/context/ctxhttp"
+
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"os"
@@ -34,7 +38,7 @@ type Devices struct {
 	Devices []Device `json:"devices"`
 }
 
-func (d *Devices) Get() error {
+func (d *Devices) Get(ctx context.Context) error {
 	cli := new(http.Client)
 
 	req, err := http.NewRequest("GET", "https://api.pushbullet.com/v2/devices", nil)
@@ -43,18 +47,17 @@ func (d *Devices) Get() error {
 	}
 	req.Header.Add("Access-Token", PushBullet.AccessToken)
 
-	resp, err := cli.Do(req)
+	resp, err := ctxhttp.Do(ctx, cli, req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(d)
-	if err != nil {
-		return err
+	if resp.StatusCode != http.StatusOK {
+		return errors.New("Failed to obtain registered devices")
 	}
 
-	return nil
+	return json.NewDecoder(resp.Body).Decode(d)
 }
 
 type User struct {
@@ -70,7 +73,7 @@ type User struct {
 	ReferredIden    string  `json:"referrer_iden"`
 }
 
-func (u *User) Get() error {
+func (u *User) Get(ctx context.Context) error {
 	cli := new(http.Client)
 
 	req, err := http.NewRequest("GET", "https://api.pushbullet.com/v2/users/me", nil)
@@ -79,11 +82,15 @@ func (u *User) Get() error {
 	}
 	req.Header.Add("Access-Token", PushBullet.AccessToken)
 
-	resp, err := cli.Do(req)
+	resp, err := ctxhttp.Do(ctx, cli, req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return errors.New("Failed to obtain user info")
+	}
 
 	return json.NewDecoder(resp.Body).Decode(u)
 }
@@ -102,14 +109,14 @@ func NewConfig() *PushBulletConfig {
 	return p
 }
 
-func (push *PushBulletConfig) Sync() error {
+func (push *PushBulletConfig) Sync(ctx context.Context) error {
 	// Sync current user profile
-	if err := push.User.Get(); err != nil {
+	if err := push.User.Get(ctx); err != nil {
 		return err
 	}
 
 	// Sync user registerd devices
-	if err := push.Devices.Get(); err != nil {
+	if err := push.Devices.Get(ctx); err != nil {
 		return err
 	}
 

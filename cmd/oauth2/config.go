@@ -109,6 +109,15 @@ func NewConfig() *PushBulletConfig {
 	return p
 }
 
+func (push *PushBulletConfig) Has(name string) *Device {
+	for _, dev := range push.Devices {
+		if dev.Nickname == name {
+			return dev
+		}
+	}
+	return nil
+}
+
 func (push *PushBulletConfig) Sync(ctx context.Context) error {
 	// Sync current user profile
 	if err := push.User.Get(ctx); err != nil {

@@ -127,7 +127,9 @@ func main() {
 			if dev == nil {
 				dev = push.Pushsettings.Default
 			}
-			pObj.Iden = dev.Iden
+			if dev != nil {
+				pObj.Iden = dev.Iden
+			}
 			break
 		case all == true:
 			break

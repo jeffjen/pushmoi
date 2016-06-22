@@ -25,6 +25,12 @@
 			"path": "golang.org/x/net/context",
 			"revision": "1961d9def2b2d7a28d7958926d2457d05a178ecd",
 			"revisionTime": "2016-06-15T20:37:29Z"
+		},
+		{
+			"checksumSHA1": "bmMDs2TxmkLkvipm2cOjS9aErxg=",
+			"path": "golang.org/x/net/context/ctxhttp",
+			"revision": "1961d9def2b2d7a28d7958926d2457d05a178ecd",
+			"revisionTime": "2016-06-15T20:37:29Z"
 		}
 	],
 	"rootPath": "github.com/jeffjen/pushmoi"

@@ -16,12 +16,16 @@ import (
 	"time"
 )
 
+const UsageText = `pushmoi [global options] command [arguments...]
+   pushmoi [global options] [. | template] [- | message]`
+
 func main() {
 	app := cli.NewApp()
 
-	app.Version = "0.0.1"
+	app.Version = "0.1.0"
 	app.Name = "pushmoi"
-	app.Usage = "Send/Receive Pushbullet message"
+	app.Usage = "Send Pushbullet message"
+	app.UsageText = UsageText
 	app.Authors = []cli.Author{
 		cli.Author{"Yi-Hung Jen", "yihungjen@gmail.com"},
 	}

@@ -7,11 +7,13 @@ device data exchange.
 ## Getting started
 You need to authorize this client to perform Pushbullet actions on your behalf.
 
-Execute `pushmoi init` and follow the instructions on the command line
+Execute `pushmoi init` and follow the instructions on the command line.
+
 **pushmoi** will setup a web server at **tcp:8080** and await OAuth response.
 
-Upon success you should see your `access_token` on the web UI.  Check back at
-the command line to review initialize status.
+Upon success you should see your `access_token` on the web UI.
+
+Check back at the command line to review initialize status.
 
 ## Fist step: Review registered devices
 Once we had a successful authorization, we can go review our settings and
@@ -39,22 +41,21 @@ There are two ways to push a message:
 - Raw text message
 - Message formated by template and context
 
-To push a raw text message, execute `pushmoi . [your text message]`.  Note that
-the message itself is treated as a single argument, so quote where necessary.
+Execute `pushmoi . [your text message]` for raw text message.
 
-To push a templated message, execute
-`pushmoi [template file] [raw text | json encoded string]`
+Note that the message itself is treated as a single argument, so quote where
+necessary.
+
+Execute `pushmoi [template file] [raw text | json encoded string]` for
+templated message
 
 The syntax for our template is documented under
 [html/template](https://golang.org/pkg/html/template/)
 
-You could attach **pushmoi** to command line pipeline and have it read output
-for your.  Note that there is a limit on the size of the payload encforced by
-Pushbullet.
+Execute `your-command-or-script | pushmoi [template file] -` to force
+**pushmoi** to consume stdin.
 
-To push through pipeline output, execute
-`your-command-or-script | pushmoi [template file] -` to force **pushmoi** to
-consume stdin.
+Note that there is a limit on the size of the payload encforced by Pushbullet.
 
 ## Select a target
 There are four ways to select your target:

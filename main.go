@@ -141,13 +141,13 @@ func main() {
 		for attempts := 0; attempts < 3; attempts++ {
 			ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 			if err := pObj.Send(ctx); err != nil {
-				return cli.NewExitError(err.Error(), 1)
+				// conitinue
 			} else {
-				break // success!
+				return nil
 			}
 		}
 
-		return nil
+		return cli.NewExitError("Unable to push message", 1)
 	}
 	app.Run(os.Args)
 }

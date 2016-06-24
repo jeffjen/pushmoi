@@ -3,6 +3,7 @@ package push
 import (
 	"github.com/jeffjen/pushmoi/oauth2"
 
+	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli"
 	"golang.org/x/net/context"
 
@@ -71,7 +72,35 @@ func getConfigPath() (string, error) {
 	}
 }
 
-func NewSetCommand() cli.Command {
+func BeforeAction() func(c *cli.Context) error {
+	return func(c *cli.Context) error {
+		if err := oauth2.Pushbullet.Load(); err != nil {
+			return cli.NewExitError(err.Error(), 1)
+		}
+
+		if err := Pushsettings.Load(); err != nil {
+			return cli.NewExitError(err.Error(), 1)
+		}
+
+		return nil
+	}
+}
+
+func NewCommand() cli.Command {
+	return cli.Command{
+		Name:   "pushbullet",
+		Usage:  "Pushbullet configuration",
+		Before: BeforeAction(),
+		Subcommands: []cli.Command{
+			newListDevices(),
+			newSetCommand(),
+			newGetCommand(),
+			newSyncCommand(),
+		},
+	}
+}
+
+func newSetCommand() cli.Command {
 	return cli.Command{
 		Name:  "set",
 		Usage: "Configure settings in pushmoi",
@@ -100,7 +129,7 @@ func NewSetCommand() cli.Command {
 	}
 }
 
-func NewGetCommand() cli.Command {
+func newGetCommand() cli.Command {
 	return cli.Command{
 		Name:  "get",
 		Usage: "Retrieve settings in pushmoi",
@@ -123,7 +152,7 @@ func NewGetCommand() cli.Command {
 	}
 }
 
-func NewSyncCommand() cli.Command {
+func newSyncCommand() cli.Command {
 	return cli.Command{
 		Name:  "sync",
 		Usage: "Sync config and check settings validity",
@@ -138,6 +167,27 @@ func NewSyncCommand() cli.Command {
 			} else {
 				return nil
 			}
+		},
+	}
+}
+
+func newListDevices() cli.Command {
+	return cli.Command{
+		Name:  "ls",
+		Usage: "List registerd devices",
+		Action: func(c *cli.Context) error {
+			table := tablewriter.NewWriter(os.Stdout)
+
+			table.SetHeader([]string{"Name", "Type", "SMS", "Active"})
+			for _, dev := range oauth2.Pushbullet.Devices {
+				if dev.Nickname == "" {
+					continue
+				}
+				table.Append([]string{dev.Nickname, dev.Icon, fmt.Sprint(dev.HasSms), fmt.Sprint(dev.Active)})
+			}
+			table.Render()
+
+			return nil
 		},
 	}
 }

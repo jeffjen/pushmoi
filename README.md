@@ -17,7 +17,7 @@ Check back at the command line to review initialize status.
 
 ## Fist step: Review registered devices
 Once we had a successful authorization, we can go review our settings and
-profile by executing `pushmoi ls`.
+profile by executing `pushmoi pushbullet ls`.
 
 Here is an example output:
 ```
@@ -31,28 +31,27 @@ Here is an example output:
 ```
 
 ## Second step: set default push target (Recommended)
-Setup your default target my executing `pushmoi set default [device name]`,
-which you found by `pushmoi ls`
+Setup your default target by executing `pushmoi pushbullet set default [device name]`
 
-Review your setting by running `pushmoi get default`
+Review your setting by running `pushmoi pushbullet get default`
 
 ## Last step: push a message
 There are two ways to push a message:
 - Raw text message
 - Message formated by template and context
 
-Execute `pushmoi . [your text message]` for raw text message.
+Execute `pushmoi send . [your text message]` for raw text message.
 
 Note that the message itself is treated as a single argument, so quote where
 necessary.
 
-Execute `pushmoi [template file] [raw text | json encoded string]` for
+Execute `pushmoi send [template file] [raw text | json encoded string]` for
 templated message
 
 The syntax for our template is documented under
 [html/template](https://golang.org/pkg/html/template/)
 
-Execute `your-command-or-script | pushmoi [template file] -` to force
+Execute `your-command-or-script | pushmoi send [template file] -` to force
 **pushmoi** to consume stdin.
 
 Note that there is a limit on the size of the payload encforced by Pushbullet.
@@ -68,17 +67,17 @@ If you push message without specification, **pushmoi** pushes to your default
 push target.  If a default is not designated, `all` is used.
 
 ### All of your registered devices
-`pushmoi --all [template] [message]`
+`pushmoi send -all [template] [message]`
 
 ### To a device
-`pushmoi --device [name] [template] [message]`
+`pushmoi send --device [name] [template] [message]`
 
 ### Email
-`pushmoi --email [email] [template] [message]`
+`pushmoi send --email [email] [template] [message]`
 
 ## Update your settings
 If you registered or removed devices, you should update your settings by
-executing `pushmoi sync`
+executing `pushmoi pushbullet sync`
 
 If you had revoked **pushmoi** permission, or that the `access_token` was lost,
 you should execute `pushmoi init` to restart authorization.
